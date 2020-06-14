@@ -19,25 +19,29 @@
 ;;
 ;;; Code:
 
+(require 'seq)
 (require 'org-datetree)
 
 (defun ecdate/get-date (&optional time)
   "Return (DAY MONTH YEAR) list from TIME.
 
 If TIME is nil, use current time."
-  (seq-subseq (decode-time time) 3 6))
+  (let ((time (or time (decode-time))))
+    (seq-subseq time 3 6)))
 
 (defun ecdate/to-usa (date)
   "Convert DATE from (DAY MONTH YEAR) to USA format (MONTH DAY YEAR)."
   (list (nth 1 date) (nth 0 date) (nth 2 date)))
 
+
+;;;###autoload
 (defun ecdate/org-insert-datetree (&optional date)
   "Insert datetree with give DATE.
 
 If DATE is nil, read date from calendar."
   (interactive)
   (if (eq major-mode 'org-mode)
-      (let (date (or date (ecdate/to-usa (ecdate/get-date (parsse-time-string (org-read-date))))))
+      (let ((date (or date (ecdate/to-usa (ecdate/get-date (parse-time-string (org-read-date)))))))
         (org-datetree-find-date-create date))
     (error "Can not insert datetree into non org-mode file")))
 
