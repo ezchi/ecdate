@@ -22,6 +22,14 @@
 (require 'seq)
 (require 'org-datetree)
 
+(defun ecdate/iso-date ()
+  "Return current time in ISO format with date only."
+  (format-time-string "%F"))
+
+(defun ecdate/iso-full ()
+  "Return current time in full ISO format."
+  (format-time-string "%FT%T%z"))
+
 (defun ecdate/get-date (&optional time)
   "Return (DAY MONTH YEAR) list from TIME.
 
